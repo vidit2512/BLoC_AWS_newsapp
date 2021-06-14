@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "newsapp5d7ba784": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

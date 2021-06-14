@@ -2,18 +2,24 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/bloc/category_bloc.dart';
+import 'package:news_app/bloc/category_event.dart';
+import 'package:news_app/bloc/category_state.dart';
 import 'package:news_app/bloc/listing_bloc.dart';
 import 'package:news_app/bloc/listing_events.dart';
 import 'package:news_app/bloc/listing_states.dart';
 import 'package:news_app/models/article_model.dart';
 import 'package:news_app/models/category_model.dart';
 
+import 'widgets/blog_tile.dart';
+import 'widgets/category_tile.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ListingBloc>(context).add(CategoryListing()); //Testing
+    BlocProvider.of<CategoryBloc>(context).add(LoadCategory()); //Testing
     BlocProvider.of<ListingBloc>(context).add(FetchNewsEvent()); //TESTING
     return Scaffold(
       appBar: AppBar(
@@ -39,9 +45,12 @@ class HomePage extends StatelessWidget {
       body: Container(
         child: Column(
           children: [
-            BlocBuilder<ListingBloc, ListingStates>(
+            BlocBuilder<CategoryBloc, CategoryState>(
+              // buildWhen: (InitialState, LoadingList) {
+              //   return true;
+              // },
               builder: (context, state) {
-                if (state is LoadingList) {
+                if (state is LoadedCategory) {
                   List<CategoryModel> categories = state.categories;
                   return
 
@@ -74,35 +83,43 @@ class HomePage extends StatelessWidget {
                   return Center(child: CircularProgressIndicator());
               },
             ),
-
-            ///////////////////////////////
+            SizedBox(
+              height: 20,
+            ),
+            // ///////////////////////////////
             BlocBuilder<ListingBloc, ListingStates>(builder: (context, state) {
               if (state is FetchedNews) {
                 List<ArticleModel> articles = state.articles;
+                // print(articles[0].title);
+                //   print('jjjjjj_____________-chiragggg');
                 return
 
                     //     SizedBox(
                     //   height:400,width:200,
-                    Container(
+                    Expanded(
                   // height: 90,
                   //    child: Expanded(
 
                   child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: Axis.vertical,
                       physics: AlwaysScrollableScrollPhysics(),
                       // shrinkWrap: true,
                       itemCount: articles.length,
                       itemBuilder: (context, int index) {
                         return BlogTile(
-                          imageurl: articles[index].url!,
+                          imageurl: articles[index].urlToImage!,
                           title: articles[index].title!,
                           desc: articles[index].description!,
                         );
                       }),
                   //   ),
                 );
-              } else if (state is ErrorState) {
-                return Card(child: Center(child: Text('Sorry,Unable to fetch News'),),);
+              } else if (state is FetchErrorState) {
+                return Card(
+                  child: Center(
+                    child: Text('Sorry,Unable to fetch News'),
+                  ),
+                );
               } else {
                 return Center(child: CircularProgressIndicator());
               }
@@ -111,78 +128,6 @@ class HomePage extends StatelessWidget {
             //   Text('HELLLOIII'),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CategoryTile extends StatelessWidget {
-  const CategoryTile({Key? key, required this.imageurl, required this.category})
-      : super(key: key);
-  final String imageurl, category;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
-      child: Container(
-        child: Stack(
-          children: [
-            Center(
-              child: Container(
-                height: 90,
-                width: 120,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(9),
-                  child: Image.network(
-                    imageurl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(9)),
-                  color: Colors.black38,
-                ),
-                height: 90,
-                width: 120,
-                child: Center(
-                  child: Text(
-                    category,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BlogTile extends StatelessWidget {
-  const BlogTile(
-      {Key? key,
-      required this.title,
-      required this.desc,
-      required this.imageurl})
-      : super(key: key);
-  final String title, desc, imageurl;
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          Image.network(imageurl),
-          Text(title),
-          Text(desc),
-        ],
       ),
     );
   }

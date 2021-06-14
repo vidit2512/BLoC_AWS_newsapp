@@ -18,4 +18,4 @@ class FetchedNews extends ListingStates {
   final List<ArticleModel> articles;
   const FetchedNews({required this.articles});
 }
-class ErrorState extends ListingStates{}
+class FetchErrorState extends ListingStates{}
