@@ -6,13 +6,13 @@ import 'source_model.dart';
 
 class ArticleModel {
   Source? source;
-  String? author;
-  String? title;
-  String? description;
-  String? url;
-  String? urlToImage;
+  String? author=" ";
+  String? title=" ";
+  String? description=" ";
+  String? url=" ";
+  String? urlToImage=" ";
   DateTime? publishedAt;
-  String? content;
+  String? content=" ";
 
   ArticleModel(this.source, this.author, this.title, this.description, this.url,
       this.urlToImage, this.publishedAt, this.content);

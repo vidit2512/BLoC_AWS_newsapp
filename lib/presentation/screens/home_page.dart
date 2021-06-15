@@ -11,8 +11,8 @@ import 'package:news_app/bloc/listing_states.dart';
 import 'package:news_app/models/article_model.dart';
 import 'package:news_app/models/category_model.dart';
 
-import 'widgets/blog_tile.dart';
-import 'widgets/category_tile.dart';
+import '../widgets/blog_tile.dart';
+import '../widgets/category_tile.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -84,14 +84,13 @@ class HomePage extends StatelessWidget {
               },
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             // ///////////////////////////////
             BlocBuilder<ListingBloc, ListingStates>(builder: (context, state) {
               if (state is FetchedNews) {
                 List<ArticleModel> articles = state.articles;
-                // print(articles[0].title);
-                //   print('jjjjjj_____________-chiragggg');
+                
                 return
 
                     //     SizedBox(

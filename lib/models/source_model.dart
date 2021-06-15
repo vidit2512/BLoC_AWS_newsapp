@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 class Source {
-  String? id;
-  String? name;
+  String? id=" ";
+  String? name=" ";
   Source(this.id, this.name);
 
   Map<String, dynamic> tojson() {

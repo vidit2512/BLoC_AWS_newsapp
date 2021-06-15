@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'article_model.dart';
 
 class NewsModel {
-  String? status;
-  int? totalResults;
+  String? status=" ";
+  int? totalResults=0;
   List<ArticleModel>? articles;
 
   NewsModel(this.status, this.totalResults, this.articles);
