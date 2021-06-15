@@ -8,6 +8,7 @@ class NewsRepository {
   NewsApiProvider _newsApiProvider = NewsApiProvider();
 
   Future<List<ArticleModel>> fetchingNews() async => _newsApiProvider.getNews();
+  Future<List<ArticleModel>> fetchingCategoryNews(String category) async => _newsApiProvider.getCategoryNews(category);
 }
 //Repo for auth
 class AuthRepository {

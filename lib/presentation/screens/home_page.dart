@@ -10,6 +10,7 @@ import 'package:news_app/bloc/listing_events.dart';
 import 'package:news_app/bloc/listing_states.dart';
 import 'package:news_app/models/article_model.dart';
 import 'package:news_app/models/category_model.dart';
+import 'package:news_app/presentation/widgets/bottom_navigator.dart';
 
 import '../widgets/blog_tile.dart';
 import '../widgets/category_tile.dart';
@@ -22,7 +23,9 @@ class HomePage extends StatelessWidget {
     BlocProvider.of<CategoryBloc>(context).add(LoadCategory()); //Testing
     BlocProvider.of<ListingBloc>(context).add(FetchNewsEvent()); //TESTING
     return Scaffold(
+        backgroundColor: Colors.grey[200],
       appBar: AppBar(
+      
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -128,6 +131,8 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+   
+   bottomNavigationBar:BottomNavigator(),
     );
   }
 }
