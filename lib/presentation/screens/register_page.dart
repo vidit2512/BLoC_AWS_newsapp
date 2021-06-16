@@ -1,7 +1,10 @@
 //import 'package:fintech/screens/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:news_app/bloc/category_bloc.dart';
+import 'package:news_app/bloc/listing_bloc.dart';
 import 'package:news_app/models/user_model.dart';
 import 'package:news_app/presentation/widgets/verify_sign_up.dart';
 import 'package:news_app/resources/authenticate_provider.dart';
@@ -11,29 +14,40 @@ import 'home_page.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({Key? key,required this.authRepository}) : super(key: key);
- 
+  RegisterPage({Key? key, required this.authRepository}) : super(key: key);
+
   final AuthRepository authRepository;
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
-    // AuthRepository authRepository=widget.authRepository;
+  // AuthRepository authRepository=widget.authRepository;
   String? username, email;
   UserModel user = UserModel();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-   final GlobalKey<FormState> _formkey2 = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey2 = GlobalKey<FormState>();
 
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
-    TextEditingController oTPassword = TextEditingController();
+  TextEditingController oTPassword = TextEditingController();
 
   //get authRepository => null;
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    password.dispose();
+    confirmpassword.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var category__bloc = BlocProvider.of<CategoryBloc>(context);
+    var listing__bloc = BlocProvider.of<ListingBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('RegisterPage'),
@@ -149,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(5)),
                     child: TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         _formkey.currentState!.save();
                         if (_formkey.currentState!.validate()) {
                           print('successful');
@@ -163,98 +177,145 @@ class _RegisterPageState extends State<RegisterPage> {
                               user.password != null &&
                               user.username != null);
 
-                      //    widget.authRepository.register(user);
-                        //#######################
+                          String asss = await widget.authRepository
+                              .register(user); //EXp...........
+                          print(asss);
+                          print('gggggggggggggg');
+
+                          //#######################
+
                           showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return
-                 AlertDialog(
-                  content: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      Positioned(
-                        right: -40.0,
-                        top: -40.0,
-                        child: InkResponse(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: CircleAvatar(
-                            child: Icon(Icons.close),
-                            backgroundColor: Colors.grey[350],
-                          ),
-                        ),
-                      ),
-                      Form(
-                        key: _formkey2,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                obscureText: true,
-                                controller: oTPassword,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'One Time Password',
-                                  hintText: '******',
-                                ),
-                                validator: (String? value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please Enter a Password';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: TextFormField(),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextButton(
-                                child: Text("Submit"),
-                                onPressed: () {
-                                  if (_formkey2.currentState!.validate()) {
-                                    _formkey2.currentState!.save();
-                                    //
-                                    //widget.authRepository.verify(
-                                      //  username!, oTPassword.text);
+                              context: context,
+                              builder: (BuildContext context2) {
+                                return BlocProvider.value(
+                                  value: BlocProvider.of<CategoryBloc>(context),
+                                  child: BlocProvider.value(
+                                    value: BlocProvider.of<ListingBloc>(context),
+                                    child: AlertDialog(
+                                      content: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: <Widget>[
+                                          Positioned(
+                                            right: -40.0,
+                                            top: -40.0,
+                                            child: InkResponse(
+                                              onTap: () {
+                                                Navigator.of(context2).pop();
+                                              },
+                                              child: CircleAvatar(
+                                                child: Icon(Icons.close),
+                                                backgroundColor:
+                                                    Colors.grey[350],
+                                              ),
+                                            ),
+                                          ),
+                                          Form(
+                                            key: _formkey2,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    obscureText: true,
+                                                    controller: oTPassword,
+                                                    decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                      labelText:
+                                                          'One Time Password',
+                                                      hintText: '******',
+                                                    ),
+                                                    validator: (String? value) {
+                                                      if (value!.isEmpty) {
+                                                        return 'Please Enter a Password';
+                                                      }
+                                                      return null;
+                                                    },
+                                                  ),
+                                                ),
+                                                // Padding(
+                                                //   padding: EdgeInsets.all(8.0),
+                                                //   child: TextFormField(),
+                                                // ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextButton(
+                                                    child: Text("Submit"),
+                                                    onPressed: () {
+                                                      if (_formkey2
+                                                          .currentState!
+                                                          .validate()) {
+                                                        _formkey2.currentState!
+                                                            .save();
 
-                                    /////////////////////
-                                  //  widget.authRepository.signout(); //EXp
-                                    // if
-                                    Navigator.pushReplacement
-                                    //(
-                                   //     context, 'homepage');
-                                    (
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomePage()));
-                                  }
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              });
-       
+                                                        widget.authRepository
+                                                            .verify(
+                                                                username!,
+                                                                oTPassword
+                                                                    .text);
 
-                        //   /////////////////////
-                        //    widget.authRepository.signout(); //EXp
-                        //   // if
-                        //   Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //           builder: (context) => HomePage()));
+                                                        /////////////////////
+                                                        widget.authRepository
+                                                            .signout(); //EXp
+
+                                                        Navigator.push(
+                                                            context2,
+                                                            //(
+                                                            //     context, 'homepage');
+                                                            MaterialPageRoute(
+                                                              builder: (_) =>
+                                                                  BlocProvider
+                                                                      .value(
+                                                                value:
+                                                                    //category__bloc,
+                                                                    BlocProvider
+                                                                        .of<CategoryBloc>(
+                                                                            context),
+                                                                child:
+                                                                    BlocProvider
+                                                                        .value(
+                                                                  value:
+                                                                      //listing__bloc,
+                                                                      BlocProvider
+                                                                          .of<ListingBloc>(
+                                                                              context),
+                                                                  child:
+                                                                      HomePage(),
+
+                                                                  //     builder: (context)=> HomePage(),
+                                                                ),
+                                                              ),
+                                                            ));
+
+                                                        // (
+                                                        //     context,
+                                                        //     MaterialPageRoute(
+                                                        //         builder: (context) => HomePage()));
+                                                      }
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              });
+
+                          //   /////////////////////
+                          //    widget.authRepository.signout(); //EXp
+                          //   // if
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => HomePage()));
                         }
                       },
                       child: Text(
@@ -297,8 +358,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  LoginPage(authRepository:widget.authRepository),
+                              builder: (_) => LoginPage(
+                                  authRepository: widget.authRepository),
                             ));
                       },
                       child: Text(

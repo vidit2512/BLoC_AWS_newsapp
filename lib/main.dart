@@ -138,7 +138,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // gives our app awareness about whether we are succesfully connected to the cloud
-  bool _amplifyConfigured = false;
+  // bool _amplifyConfigured = false;
   AuthRepository authRepository = AuthRepository();
 
   // Instantiate Amplify
@@ -150,6 +150,7 @@ class _MyAppState extends State<MyApp> {
 
   bool isSignUpComplete = false;
   bool isSignedIn = false;
+  bool _amplifyConfigured = false;
 
   @override
   void initState() {
@@ -169,15 +170,19 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  void _configureAmplify() async {
+  Future<void> _configureAmplify() async {
     if (!mounted) return;
 
     // add all of the plugins we are currently using
     // in our case... just one - Auth
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-    Amplify.addPlugin(authPlugin);
-
-    await Amplify.configure(amplifyconfig);
+    print('hhhhhhhhhhhhhhh');
+    
+    await Amplify.addPlugins([authPlugin]);
+    if (!Amplify.isConfigured) {
+      await Amplify.configure(amplifyconfig);
+    }
+    //   await Amplify.configure(amplifyconfig);
     try {
       setState(() {
         _amplifyConfigured = true;
@@ -185,11 +190,14 @@ class _MyAppState extends State<MyApp> {
     } catch (e) {
       print(e);
     }
+    return;
   }
 
   @override
   Widget build(BuildContext context) {
     final NewsRepository newsRepository = NewsRepository();
+    print(_amplifyConfigured);
+    print('?????????????????????????/');
     return MultiBlocProvider(
       providers: [
         BlocProvider<ListingBloc>(
@@ -199,27 +207,36 @@ class _MyAppState extends State<MyApp> {
           create: (context) => CategoryBloc(),
         ),
       ],
-      
-      child: MaterialApp(
-       
+      child:
+          //FutureBuilder<void>(
+          // future: _configureAmplify(),
+          // builder: (context, snapshot) {
+          //   if (snapshot.hasData && _amplifyConfigured) {
+          //return
+          MaterialApp(
         title: 'Flutter Times',
         theme: ThemeData(
           primaryColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginPage(authRepository:authRepository),
-        onUnknownRoute: (RouteSettings settings) {
-      return MaterialPageRoute<void>(
-        settings: settings,
-        builder: (BuildContext context) =>
-           HomePage(),
-      );
-    },
-        routes: {
-          'homepage':(context)=>HomePage(),
-        },
+        home: LoginPage(authRepository: authRepository),
+        //     onUnknownRoute: (RouteSettings settings) {
+        //   return MaterialPageRoute<void>(
+        //     settings: settings,
+        //     builder: (BuildContext context) =>
+        //        HomePage(),
+        //   );
+        // },
+        // routes: {
+        //   'homepage':(context)=>HomePage(),
+        // },
         // home:BlogTile(title: 'my name is vidit', desc: 'aaadmvfkvifovunfnvufdvnfduvfdnvn', imageurl: 'https://smeloans.co.uk/assets/media-library/images/hero-test-3-1000.jpg'),
       ),
+
+      // } else {
+      //   return Center(child: CircularProgressIndicator());
+      // }
+      // }),
     );
   }
 }

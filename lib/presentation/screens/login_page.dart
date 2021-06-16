@@ -1,7 +1,10 @@
 //import 'package:fintech/screens/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:news_app/bloc/category_bloc.dart';
+import 'package:news_app/bloc/listing_bloc.dart';
 import 'package:news_app/models/user_model.dart';
 import 'package:news_app/resources/authenticate_provider.dart';
 import 'package:news_app/resources/repository.dart';
@@ -22,7 +25,15 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   TextEditingController password = TextEditingController();
   // TextEditingController confirmpassword = TextEditingController();
+@override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+   password.dispose();
+   // confirmpassword.dispose();
 
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,8 +127,31 @@ class _LoginPageState extends State<LoginPage> {
 
                           Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                              // MaterialPageRoute(
+                              //     builder: (context) => HomePage())
+                              MaterialPageRoute<
+                                                            HomePage>(
+                                                          builder: (ctx) =>
+                                                              BlocProvider
+                                                                  .value(
+                                                            value: BlocProvider
+                                                                .of<CategoryBloc>(
+                                                                    ctx),
+                                                            child: BlocProvider
+                                                                .value(
+                                                              value: BlocProvider
+                                                                  .of<ListingBloc>(
+                                                                      ctx),
+                                                              child: HomePage(),
+
+                                                              //     builder: (context)=> HomePage(),
+                                                            ),
+                                                          ),
+                                                        )
+                                  
+                                  );
+
+                                   widget.authRepository.signout();
                         }
                       },
                       child: Text(
@@ -158,7 +192,15 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => RegisterPage( authRepository:widget.authRepository,),));
+                            MaterialPageRoute(builder: (ctx) =>BlocProvider.value(
+                              value:BlocProvider.of<CategoryBloc>(ctx),
+                              child:BlocProvider.value(
+                              value:BlocProvider.of<ListingBloc>(ctx),
+                              child: RegisterPage( authRepository:widget.authRepository,),
+                            ),
+                            
+                            ))
+                        );
                       },
                       child: Text(
                         'Register',

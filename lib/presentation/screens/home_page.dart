@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CategoryBloc>(context).add(LoadCategory()); //Testing
-    BlocProvider.of<ListingBloc>(context).add(FetchNewsEvent()); //TESTING
+   BlocProvider.of<ListingBloc>(context).add(FetchNewsEvent()); //TESTING
     return Scaffold(
         backgroundColor: Colors.grey[200],
       appBar: AppBar(

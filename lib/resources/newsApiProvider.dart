@@ -9,7 +9,7 @@ class NewsApiProvider {
 
   Future<List<ArticleModel>> getNews() async {
     var url = Uri.parse(
-        'https://newsapi.org/v2/everything?q=tesla&from=2021-05-15&sortBy=publishedAt&apiKey=72c5ed39c7c04c48a2cf105ee3653d56');
+        'https://newsapi.org/v2/everything?q=tesla&from=2021-05-16&sortBy=publishedAt&apiKey=93beb86e24b8499db8c9ce1021068f1e');
     //72c5ed39c7c04c48a2cf105ee3653d56
     //93beb86e24b8499db8c9ce1021068f1e
     var response = await http.get(url);

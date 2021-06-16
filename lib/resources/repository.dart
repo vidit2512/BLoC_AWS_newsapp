@@ -18,5 +18,6 @@ class AuthRepository {
   Future<String> register(UserModel user) async => _authRepository.registerUser(user);
   void signout() async => _authRepository.signout();
    Future<String> verify(String username, String otp) async => _authRepository.confirmSignUp( username,otp) ;
+ //  void configureAmplify() async => _authRepository.configureAmplify();
 
 }

@@ -1,11 +1,16 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 //import 'package:flutter/material.dart';
+//import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+//import 'package:amplify_flutter/amplify.dart';
 import 'package:news_app/models/user_model.dart';
+
+import '../amplifyconfiguration.dart';
 
 class AuthencticateProvider {
   bool isSignUpComplete = false;
   bool isSignedIn = false;
+  //  bool _amplifyConfigured = false;
 
   Future<String> registerUser(UserModel data) async {
     try {
@@ -28,7 +33,7 @@ class AuthencticateProvider {
       // isSignUpComplete = res.isSignUpComplete;
       //     }
       print("Sign up: " + (isSignUpComplete ? "Complete" : "Not Complete"));
-      return isSignUpComplete as String; //expppp
+      return isSignUpComplete.toString(); //expppp
       //});
     } on AuthException catch (e) {
       print(e);
@@ -50,7 +55,7 @@ class AuthencticateProvider {
 
       //   Alert(context: context, type: AlertType.success, title: "Login Success")
       //       .show();
-      return isSignedIn as String;
+      return isSignedIn.toString();
     } on AuthException catch (e) {
       print(e);
       // Alert(context: context, type: AlertType.error, title: "Login Failed")
@@ -69,12 +74,12 @@ class AuthencticateProvider {
 
   Future<String> confirmSignUp(String username, String otp) async {
     try {
-      isSignUpComplete = false;
+     // isSignUpComplete = false;
       SignUpResult res = await Amplify.Auth.confirmSignUp(
           username: username, confirmationCode: otp);
       // setState(() {
       isSignUpComplete = res.isSignUpComplete;
-      return isSignUpComplete as String;
+      return isSignUpComplete.toString();
       // });
     } on AuthException catch (e) {
       print(e.message);
@@ -82,4 +87,23 @@ class AuthencticateProvider {
      // throw e;
     }
   }
+
+  //  void configureAmplify() async {
+  //   if (! _amplifyConfigured) return;
+
+  //   // add all of the plugins we are currently using
+  //   // in our case... just one - Auth
+  //   AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+  //   Amplify.addPlugin(authPlugin);
+
+  //   await Amplify.configure(amplifyconfig);
+  //   try {
+  //  //   setState(() {
+  //       _amplifyConfigured = true;
+  //    // });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+  
 }
