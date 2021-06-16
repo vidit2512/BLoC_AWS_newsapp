@@ -114,6 +114,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:news_app/presentation/screens/home_page.dart';
 import 'package:news_app/presentation/screens/register_page.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -207,6 +208,16 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home: LoginPage(authRepository:authRepository),
+        onUnknownRoute: (RouteSettings settings) {
+      return MaterialPageRoute<void>(
+        settings: settings,
+        builder: (BuildContext context) =>
+           HomePage(),
+      );
+    },
+        routes: {
+          'homepage':(context)=>HomePage(),
+        },
         // home:BlogTile(title: 'my name is vidit', desc: 'aaadmvfkvifovunfnvufdvnfduvfdnvn', imageurl: 'https://smeloans.co.uk/assets/media-library/images/hero-test-3-1000.jpg'),
       ),
     );

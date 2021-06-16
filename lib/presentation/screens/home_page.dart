@@ -17,6 +17,7 @@ import '../widgets/category_tile.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+  final String route='homepage';
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:news_app/models/user_model.dart';
+import 'package:news_app/presentation/widgets/verify_sign_up.dart';
 import 'package:news_app/resources/authenticate_provider.dart';
 import 'package:news_app/resources/repository.dart';
 
@@ -23,8 +24,11 @@ class _RegisterPageState extends State<RegisterPage> {
   String? username, email;
   UserModel user = UserModel();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+   final GlobalKey<FormState> _formkey2 = GlobalKey<FormState>();
+
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
+    TextEditingController oTPassword = TextEditingController();
 
   //get authRepository => null;
 
@@ -159,15 +163,98 @@ class _RegisterPageState extends State<RegisterPage> {
                               user.password != null &&
                               user.username != null);
 
-                         widget.authRepository.register(user);
+                      //    widget.authRepository.register(user);
+                        //#######################
+                          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return
+                 AlertDialog(
+                  content: Stack(
+                    clipBehavior: Clip.none,
+                    children: <Widget>[
+                      Positioned(
+                        right: -40.0,
+                        top: -40.0,
+                        child: InkResponse(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: CircleAvatar(
+                            child: Icon(Icons.close),
+                            backgroundColor: Colors.grey[350],
+                          ),
+                        ),
+                      ),
+                      Form(
+                        key: _formkey2,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                obscureText: true,
+                                controller: oTPassword,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'One Time Password',
+                                  hintText: '******',
+                                ),
+                                validator: (String? value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please Enter a Password';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextFormField(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextButton(
+                                child: Text("Submit"),
+                                onPressed: () {
+                                  if (_formkey2.currentState!.validate()) {
+                                    _formkey2.currentState!.save();
+                                    //
+                                    //widget.authRepository.verify(
+                                      //  username!, oTPassword.text);
 
-                          /////////////////////
-                           widget.authRepository.signout(); //EXp
-                          // if
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                                    /////////////////////
+                                  //  widget.authRepository.signout(); //EXp
+                                    // if
+                                    Navigator.pushReplacement
+                                    //(
+                                   //     context, 'homepage');
+                                    (
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()));
+                                  }
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              });
+       
+
+                        //   /////////////////////
+                        //    widget.authRepository.signout(); //EXp
+                        //   // if
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => HomePage()));
                         }
                       },
                       child: Text(

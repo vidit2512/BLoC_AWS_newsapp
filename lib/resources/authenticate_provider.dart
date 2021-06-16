@@ -30,7 +30,7 @@ class AuthencticateProvider {
       print("Sign up: " + (isSignUpComplete ? "Complete" : "Not Complete"));
       return isSignUpComplete as String; //expppp
       //});
-    } catch (e) {
+    } on AuthException catch (e) {
       print(e);
       return "Register Error: " + e.toString();
     }
@@ -51,7 +51,7 @@ class AuthencticateProvider {
       //   Alert(context: context, type: AlertType.success, title: "Login Success")
       //       .show();
       return isSignedIn as String;
-    } catch (e) {
+    } on AuthException catch (e) {
       print(e);
       // Alert(context: context, type: AlertType.error, title: "Login Failed")
       //     .show();
@@ -64,6 +64,22 @@ class AuthencticateProvider {
       Amplify.Auth.signOut();
     } on AuthException catch (e) {
       print(e.message);
+    }
+  }
+
+  Future<String> confirmSignUp(String username, String otp) async {
+    try {
+      isSignUpComplete = false;
+      SignUpResult res = await Amplify.Auth.confirmSignUp(
+          username: username, confirmationCode: otp);
+      // setState(() {
+      isSignUpComplete = res.isSignUpComplete;
+      return isSignUpComplete as String;
+      // });
+    } on AuthException catch (e) {
+      print(e.message);
+      return e.toString();
+     // throw e;
     }
   }
 }
