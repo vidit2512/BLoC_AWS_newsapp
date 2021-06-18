@@ -9,7 +9,7 @@ class NewsApiProvider {
 
   Future<List<ArticleModel>> getNews() async {
     var url = Uri.parse(
-        'https://newsapi.org/v2/everything?q=tesla&from=2021-05-16&sortBy=publishedAt&apiKey=93beb86e24b8499db8c9ce1021068f1e');
+        'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=93beb86e24b8499db8c9ce1021068f1e');
     //72c5ed39c7c04c48a2cf105ee3653d56
     //93beb86e24b8499db8c9ce1021068f1e
     var response = await http.get(url);
@@ -41,7 +41,7 @@ class NewsApiProvider {
     if (jsonData['status'] == "ok") {
       print('@@@@@@@@');
       news = NewsModel.rawjson(response.body).articles!;
-      List<ArticleModel> safenews=[];
+      List<ArticleModel> safenews = [];
       news.forEach((el) {
         if (el.author != null &&
             el.content != null &&
@@ -51,8 +51,7 @@ class NewsApiProvider {
             //el.source!.name != null &&
             el.title != null &&
             //el.url != null &&
-            el.urlToImage != null
-            ) safenews.add(el);
+            el.urlToImage != null) safenews.add(el);
         print(el);
         print('////////');
       });
@@ -63,9 +62,12 @@ class NewsApiProvider {
     }
   }
 
- Future<List<ArticleModel>> getCategoryNews(String category) async {
-    var url = Uri.parse(
-        'https://newsapi.org/v2/everything?q='+category+'&from=2021-05-15&sortBy=publishedAt&apiKey=72c5ed39c7c04c48a2cf105ee3653d56');
+  Future<List<ArticleModel>> getCategoryNews(String category) async {
+    var url = Uri.parse
+    // ('https://newsapi.org/v2/everything?q=' +
+    //     category +
+    //     '&from=2021-05-15&sortBy=publishedAt&apiKey=72c5ed39c7c04c48a2cf105ee3653d56');
+    ('https://newsapi.org/v2/top-headlines?country=us&category='+category+'&apiKey=93beb86e24b8499db8c9ce1021068f1e');
     //72c5ed39c7c04c48a2cf105ee3653d56
     //93beb86e24b8499db8c9ce1021068f1e
     var response = await http.get(url);
@@ -97,28 +99,24 @@ class NewsApiProvider {
     if (jsonData['status'] == "ok") {
       print('@@@@@@@@');
       news = NewsModel.rawjson(response.body).articles!;
-      List<ArticleModel> safenews=[];
-      news.forEach((el) {
-        if (el.author != null &&
-            el.content != null &&
-            //el.publishedAt != null &&
-            //el.source != null &&
-            //el.source!.id != null &&
-            //el.source!.name != null &&
-            el.title != null &&
-            //el.url != null &&
-            el.urlToImage != null
-            ) safenews.add(el);
-        print(el);
-        print('////////');
-      });
+   //   List<ArticleModel> safenews = [];
+      // news.forEach((el) {
+      //   if (el.author != null &&
+      //       el.content != null &&
+      //       //el.publishedAt != null &&
+      //       //el.source != null &&
+      //       //el.source!.id != null &&
+      //       //el.source!.name != null &&
+      //       el.title != null &&
+      //       //el.url != null &&
+      //       el.urlToImage != null) safenews.add(el);
+        //print(el);
+        //print('////////');
+      //});
       print(news);
-      return safenews;
+      return news;
     } else {
       throw Exception('not able to load');
     }
   }
-
-
 }
-

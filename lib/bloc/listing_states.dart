@@ -19,3 +19,4 @@ class FetchedNews extends ListingStates {
   const FetchedNews({required this.articles});
 }
 class FetchErrorState extends ListingStates{}
+class ZeroResults extends ListingStates{}

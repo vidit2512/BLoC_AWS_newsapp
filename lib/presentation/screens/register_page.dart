@@ -5,6 +5,7 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:news_app/bloc/category_bloc.dart';
 import 'package:news_app/bloc/listing_bloc.dart';
+import 'package:news_app/bloc/listing_states.dart';
 import 'package:news_app/models/user_model.dart';
 import 'package:news_app/presentation/widgets/verify_sign_up.dart';
 import 'package:news_app/resources/authenticate_provider.dart';
@@ -152,6 +153,17 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(
                 height: 30,
               ),
+              //#############
+              // BlocListener<ListingBloc,ListingStates>(
+              //   listener:(context,state)
+              //   {
+              //     if(state is showAlertState)
+
+              //   }
+
+              // ),
+
+              //###################
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
@@ -181,16 +193,20 @@ class _RegisterPageState extends State<RegisterPage> {
                               .register(user); //EXp...........
                           print(asss);
                           print('gggggggggggggg');
-
+ NewsRepository
+                                                            newsRepository =
+                                                            NewsRepository();
                           //#######################
 
+                          // MultiBlocListener
                           showDialog(
                               context: context,
                               builder: (BuildContext context2) {
-                                return BlocProvider.value(
-                                  value: BlocProvider.of<CategoryBloc>(context),
-                                  child: BlocProvider.value(
-                                    value: BlocProvider.of<ListingBloc>(context),
+                                return BlocProvider(
+                                  create: (context) => ListingBloc(
+                                      newsRepository: newsRepository),
+                                  child: BlocProvider(
+                                    create: (context) => CategoryBloc(),
                                     child: AlertDialog(
                                       content: Stack(
                                         clipBehavior: Clip.none,
@@ -261,6 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                         /////////////////////
                                                         widget.authRepository
                                                             .signout(); //EXp
+                                                       
 
                                                         Navigator.push(
                                                             context2,
@@ -268,21 +285,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                                             //     context, 'homepage');
                                                             MaterialPageRoute(
                                                               builder: (_) =>
-                                                                  BlocProvider
-                                                                      .value(
-                                                                value:
-                                                                    //category__bloc,
-                                                                    BlocProvider
-                                                                        .of<CategoryBloc>(
-                                                                            context),
-                                                                child:
-                                                                    BlocProvider
-                                                                        .value(
-                                                                  value:
-                                                                      //listing__bloc,
-                                                                      BlocProvider
-                                                                          .of<ListingBloc>(
-                                                                              context),
+                                                                  // BlocBuilder(builder: builder)
+                                                                  BlocProvider<
+                                                                      ListingBloc>(
+                                                                create: (context) =>
+                                                                    ListingBloc(
+                                                                        newsRepository:
+                                                                            newsRepository),
+                                                                //category__bloc,
+                                                                child: BlocProvider<
+                                                                    CategoryBloc>(
+                                                                  create: (context) =>
+                                                                      CategoryBloc(),
+
                                                                   child:
                                                                       HomePage(),
 

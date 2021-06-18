@@ -17,18 +17,19 @@ import '../widgets/category_tile.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-  final String route='homepage';
+  final String route = 'homepage';
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CategoryBloc>(context).add(LoadCategory()); //Testing
-   BlocProvider.of<ListingBloc>(context).add(FetchNewsEvent()); //TESTING
+    BlocProvider.of<ListingBloc>(context).add(FetchNewsEvent()); //TESTING
     return Scaffold(
-        backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-      
+        backgroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          
           children: <Widget>[
             Text(
               'Flutter',
@@ -94,7 +95,7 @@ class HomePage extends StatelessWidget {
             BlocBuilder<ListingBloc, ListingStates>(builder: (context, state) {
               if (state is FetchedNews) {
                 List<ArticleModel> articles = state.articles;
-                
+
                 return
 
                     //     SizedBox(
@@ -110,17 +111,28 @@ class HomePage extends StatelessWidget {
                       itemCount: articles.length,
                       itemBuilder: (context, int index) {
                         return BlogTile(
-                          imageurl: articles[index].urlToImage!,
-                          title: articles[index].title!,
-                          desc: articles[index].description!,
+                          imageurl: articles[index].urlToImage ?? '',
+                          title: articles[index].title ?? '',
+                          desc: articles[index].description ?? '',
                         );
                       }),
                   //   ),
                 );
               } else if (state is FetchErrorState) {
-                return Card(
+                return Container(
+                  height: 200,
+                  width: double.infinity,
                   child: Center(
                     child: Text('Sorry,Unable to fetch News'),
+                  ),
+                );
+              } else if (state is ZeroResults) {
+                return Container(
+                  height: 200,
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                        'Sorry,No results found accodring to your search :( '),
                   ),
                 );
               } else {
@@ -132,8 +144,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-   
-   bottomNavigationBar:BottomNavigator(),
+      bottomNavigationBar: BottomNavigator(),
     );
   }
 }

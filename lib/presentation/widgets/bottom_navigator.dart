@@ -22,10 +22,10 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       style: optionStyle,
     ),
    
-    // Text(
-    //   'Index 2:gift',
-    //   style: optionStyle,
-    // ),
+    Text(
+      'Index 2:profile',
+      style: optionStyle,
+    ),
   
   ];
 
@@ -52,11 +52,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
            
           ),
          
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.card_giftcard),
-          //   label: 'gift',
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'profile',
           
-          // ),
+          ),
         
         ],
         currentIndex: _selectedIndex,

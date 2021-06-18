@@ -11,14 +11,14 @@ List<CategoryModel> getCategories() {
       new CategoryModel(imageurl: imageurl, category: category);
 
   imageurl = 'https://smeloans.co.uk/assets/media-library/images/hero-test-3-1000.jpg';
-  category = 'Tech';
+  category = 'Technology';
 
   CategoryModel categorymodel2 =
       new CategoryModel(imageurl: imageurl, category: category);
 
   imageurl =
       'https://smeloans.co.uk/assets/media-library/images/hero-test-3-1000.jpg';
-  category = 'Edu';
+  category = 'Education';
 
   CategoryModel categorymodel3 =
       new CategoryModel(imageurl: imageurl, category: category);
