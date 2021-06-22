@@ -39,8 +39,10 @@ class ListingBloc extends Bloc<ListingEvents, ListingStates> {
       {
          articles = await newsRepository.fetchingCategoryNews(event.category);
         print('heyyyyy');
-       
+         if(articles.length!=0)
         yield FetchedNews(articles: articles);
+        else yield ZeroResults();
+       
       }
     } catch (e) {
       print(e.toString());

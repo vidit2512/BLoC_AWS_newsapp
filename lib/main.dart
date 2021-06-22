@@ -123,6 +123,7 @@ import 'bloc/category_bloc.dart';
 import 'bloc/listing_bloc.dart';
 import 'models/user_model.dart';
 import 'presentation/screens/login_page.dart';
+import 'presentation/screens/navigator_page.dart';
 import 'resources/repository.dart';
 
 void main() {
@@ -220,7 +221,10 @@ class _MyAppState extends State<MyApp> {
           primaryColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginPage(authRepository: authRepository),
+        home:
+         //LoginPage(authRepository: authRepository),
+         NavigatorPage(),
+
         //     onUnknownRoute: (RouteSettings settings) {
         //   return MaterialPageRoute<void>(
         //     settings: settings,

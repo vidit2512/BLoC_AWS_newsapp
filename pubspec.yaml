@@ -32,6 +32,7 @@ dependencies:
   flutter_login: ^2.0.0
   rflutter_alert: ^2.0.2
   amplify_flutter: ^0.1.5
+  tuple: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
